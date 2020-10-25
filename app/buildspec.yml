@@ -1,0 +1,16 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - apt-get update
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - REPOSITORY_URI=$AWSACCOUNTID.dkr.ecr.us-east-1.amazonaws.com/python-flask
+  build:
+    commands:
+      - aws --version
+      - docker build -t python-flask:0-10-0 packer_build_0_10_0
+      - docker build -t $REPOSITORY_URI:0-10-0 .
+      - docker push $REPOSITORY_URI:0-10-0

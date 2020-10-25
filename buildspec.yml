@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - apt-get update
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - REPOSITORY_URI=$AWSACCOUNTID.dkr.ecr.us-east-1.amazonaws.com/python-flask
+  build:
+    commands:
+      - aws --version
+      - docker build -t test-app .
+      - docker tag test-app:latest 661159855470.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest
+      - docker push 661159855470.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest
+      - aws ecs update-service --cluster cb-cluster --service cb-service --desired-count 3 --health-check-grace-period-seconds 60 --force-new-deployment --region us-east-1
