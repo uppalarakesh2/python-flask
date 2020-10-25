@@ -13,8 +13,8 @@ phases:
       - aws --version
       - echo Building Docker image
       - docker build -t test-app .
-      - docker tag test-app:latest 100986504827.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest
-      - docker push 100986504827.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest
+      - docker tag test-app:latest $AWSACCOUNTID.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest
+      - docker push $AWSACCOUNTID.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest
       - BRANCH_REGEX="pr/*"
       - |
         if [[ "${CODEBUILD_SOURCE_VERSION}" =~ $BRANCH_REGEX ]]; then
