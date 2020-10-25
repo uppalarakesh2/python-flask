@@ -15,8 +15,10 @@ phases:
       - docker build -t test-app .
       - docker tag test-app:latest 100986504827.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest
       - docker push 100986504827.dkr.ecr.us-east-1.amazonaws.com/python-flask:latest
+      - BRANCH_REGEX="pr/*"
       - |
-        if [ "${CODEBUILD_SOURCE_VERSION}" = "pr/1" ]; then
+        if [[ "${CODEBUILD_SOURCE_VERSION}" =~ $BRANCH_REGEX ]]; then
             echo nothing to do
         else:
             aws ecs update-service --cluster cb-cluster --service cb-service --desired-count 3 --health-check-grace-period-seconds 60 --force-new-deployment --region us-east-1
+
