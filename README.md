@@ -1,4 +1,3 @@
-# Sample Dockerized Service
 
 This repo serves as a very simple containerized service, complete with health
 check.
